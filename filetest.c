@@ -1,15 +1,31 @@
 #include <stdio.h>
-#include <populate.c>
-#include <my_global.h>
 #include <mysql.h>
-#include <fstream.h>
+
+
+void get_data(MYSQL * con)
+{
+	char SQLString[500];
+	sprintf(SQLString,"SELECT * from mixer_temp INTO OUTFILE '/tmp/data4.csv'FIELDS TERMINATED BY ',');
+	printf("%s\n",SQLString);
+	if(mysql_query(con,SQLString))
+	{
+		printf("%s\n",mysql_error(con));
+	}
+}
 int main()
 {
-	FILE * fp;
-	fp = fopen("data.csv","w");
-	if (fp)
-	{	
-		fprintf(fp,"hello\n");
-		fclose(fp);
+
+	MYSQL *con=mysql_init(NULL);
+	if (con==NULL)
+	{
+		fprintf(stderr,"%s\n",mysql_error(con));
+		return(1);
+		
 	}
+	if (mysql_real_connect(con,"localhost","root","","process_control",0,NULL,0)==NULL)
+	{
+		fprintf(stderr,"%s\n",mysql_error(con));
+		return(2);
+	}
+	get_data(con);
 }
