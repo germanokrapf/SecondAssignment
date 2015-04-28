@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <my_global.h>
 #include <mysql.h>
-
+// testing
 void put_temperature(MYSQL * con,double temperature)
 {
 	char SQLString[100];
